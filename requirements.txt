@@ -1,0 +1,19 @@
+# Core Dependencies
+flask==3.0.0
+werkzeug==3.0.1
+ping3==4.0.4
+paramiko==3.4.0
+pandas>=2.2.0
+
+# Security & SSH
+cryptography>=41.0.0
+
+# Optional but recommended
+python-dateutil>=2.8.2
+pytz>=2023.3
+
+# For better CSV handling
+numpy>=1.26.0
+
+# For notifications
+requests>=2.31.0

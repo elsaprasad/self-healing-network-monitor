@@ -1,0 +1,75 @@
+{
+  "devices": [
+    {
+      "ip": "8.8.8.8",
+      "label": "Google DNS",
+      "ssh_enabled": false
+    },
+    {
+      "ip": "1.1.1.1",
+      "label": "Cloudflare DNS",
+      "ssh_enabled": false
+    },
+    {
+      "ip": "10.59.249.15",
+      "label": "Geethika's Laptop",
+      "ssh_enabled": true,
+      "ssh_username": "geeth",
+      "ssh_password": "Geethika@2006",
+      "ssh_port": 22,
+      "healing_commands": [
+        "powershell -Command \"Disable-NetAdapter -Name 'Wi-Fi' -Confirm:$false\"",
+        "powershell -Command \"Enable-NetAdapter -Name 'Wi-Fi' -Confirm:$false\""
+      ]
+    },
+    {
+      "ip": "10.59.249.199",
+      "label": "My Laptop",
+      "ssh_enabled": true,
+      "ssh_username": "DELL",
+      "ssh_password": "1212",
+      "ssh_port": 22,
+      "healing_commands": [
+        "systemctl restart networking",
+        "ifconfig eth0 down && ifconfig eth0 up"
+      ]
+    }
+  ],
+  "monitoring": {
+    "ping_interval_seconds": 30,
+    "ping_timeout_seconds": 2,
+    "failure_threshold": 3
+  },
+  "healing": {
+    "enabled": true,
+    "max_attempts": 2,
+    "wait_between_attempts_seconds": 10
+  },
+  "logging": {
+    "log_directory": "logs",
+    "log_file": "uptime.csv"
+  },
+  "dashboard": {
+    "host": "0.0.0.0",
+    "port": 5000,
+    "debug": false
+  },
+  "notifications": {
+    "email": {
+      "enabled": false,
+      "smtp_server": "smtp.gmail.com",
+      "smtp_port": 587,
+      "username": "your-email@gmail.com",
+      "password": "your-app-password",
+      "from_email": "your-email@gmail.com",
+      "to_emails": ["alert@example.com"]
+    },
+    "whatsapp": {
+      "enabled": false,
+      "twilio_account_sid": "your-twilio-account-sid",
+      "twilio_auth_token": "your-twilio-auth-token",
+      "twilio_whatsapp_number": "+14155238886",
+      "to_numbers": ["+1234567890"]
+    }
+  }
+}
