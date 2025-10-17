@@ -1,58 +1,192 @@
 {
-  "devices": [
-    {
-      "ip": "8.8.8.8",
-      "label": "Google DNS",
-      "ssh_enabled": false
-    },
-    {
-      "ip": "1.1.1.1",
-      "label": "Cloudflare DNS",
-      "ssh_enabled": false
-    },
-    {
-      "ip": "10.59.249.15",
-      "label": "Geethika's Laptop",
-      "ssh_enabled": true,
-      "ssh_username": "geeth",
-      "ssh_password": "Geethika@2006",
-      "ssh_port": 22,
-      "healing_commands": [
-        "powershell -Command \"Disable-NetAdapter -Name 'Wi-Fi' -Confirm:$false\"",
-        "powershell -Command \"Enable-NetAdapter -Name 'Wi-Fi' -Confirm:$false\""
+  "labs": {
+    "lab1": {
+      "name": "Main Lab",
+      "location": "Building A - Floor 2",
+      "description": "Primary network infrastructure",
+      "devices": [
+        {
+          "ip": "8.8.8.8",
+          "label": "Google DNS",
+          "ssh_enabled": false,
+          "device_type": "dns_server",
+          "health_checks": {
+            "ping": true,
+            "dns": true,
+            "port_checks": [
+              53
+            ]
+          }
+        },
+        {
+          "ip": "1.1.1.1",
+          "label": "Cloudflare DNS",
+          "ssh_enabled": false,
+          "device_type": "dns_server",
+          "health_checks": {
+            "ping": true,
+            "dns": true
+          }
+        }
       ]
     },
-    {
-      "ip": "10.59.249.199",
-      "label": "My Laptop",
-      "ssh_enabled": true,
-      "ssh_username": "DELL",
-      "ssh_password": "1212",
-      "ssh_port": 22,
-      "healing_commands": [
-        "systemctl restart networking",
-        "ifconfig eth0 down && ifconfig eth0 up"
+    "lab2": {
+      "name": "Student Lab",
+      "location": "Building B - Floor 1",
+      "description": "Student workstations and servers",
+      "devices": [
+        {
+          "ip": "172.20.1.105",
+          "label": "Geethika's Laptop",
+          "ssh_enabled": true,
+          "ssh_username": "geeth",
+          "ssh_password": "Geethika@2006",
+          "ssh_port": 22,
+          "device_type": "workstation",
+          "os": "windows",
+          "health_checks": {
+            "ping": true,
+            "ssh": true,
+            "performance_metrics": true
+          },
+          "healing_commands": [
+            "powershell -Command \"Disable-NetAdapter -Name 'Wi-Fi' -Confirm:$false\"",
+            "powershell -Command \"Enable-NetAdapter -Name 'Wi-Fi' -Confirm:$false\""
+          ]
+        }
+      ]
+    },
+    "lab3": {
+      "name": "Web Services Lab",
+      "location": "Building C - Floor 3",
+      "description": "Web servers and applications",
+      "devices": [
+        {
+          "ip": "192.168.1.100",
+          "label": "Web Server 1",
+          "ssh_enabled": false,
+          "ssh_username": "admin",
+          "ssh_password": "password123",
+          "device_type": "web_server",
+          "os": "linux",
+          "health_checks": {
+            "ping": true,
+            "http": {
+              "enabled": true,
+              "url": "http://192.168.1.100",
+              "expected_status": 200,
+              "timeout": 5
+            },
+            "https": {
+              "enabled": true,
+              "url": "https://192.168.1.100",
+              "check_certificate": true
+            },
+            "port_checks": [
+              80,
+              443,
+              22
+            ],
+            "performance_metrics": true
+          }
+        }
+      ]
+    },
+    "lab_4": {
+      "name": "Code Base",
+      "location": "Room 303",
+      "description": "",
+      "devices": [
+        {
+          "ip": "172.20.1.106",
+          "label": "Elsa's Laptop",
+          "ssh_enabled": true,
+          "ssh_username": "dell",
+          "ssh_password": "1212",
+          "ssh_port": 22,
+          "health_checks": {
+            "ping": true,
+            "http": {
+              "enabled": false,
+              "url": "",
+              "expected_status": 200
+            },
+            "port_checks": [],
+            "performance_metrics": true
+          }
+        }
       ]
     }
-  ],
+  },
   "monitoring": {
     "ping_interval_seconds": 30,
     "ping_timeout_seconds": 2,
-    "failure_threshold": 3
+    "failure_threshold": 3,
+    "http_timeout_seconds": 5,
+    "performance_metrics_interval": 60
   },
   "healing": {
     "enabled": true,
     "max_attempts": 2,
     "wait_between_attempts_seconds": 10
   },
+  "database": {
+    "type": "sqlite",
+    "path": "monitoring_data.db",
+    "cleanup_days": 30
+  },
   "logging": {
     "log_directory": "logs",
-    "log_file": "uptime.csv"
+    "log_file": "uptime.csv",
+    "log_level": "INFO"
   },
   "dashboard": {
     "host": "0.0.0.0",
     "port": 5000,
-    "debug": false
+    "debug": false,
+    "secret_key": "change-this-to-a-random-secret-key-in-production",
+    "websocket_enabled": true,
+    "session_timeout_minutes": 30
+  },
+  "users": {
+    "database_path": "users.db",
+    "password_min_length": 8,
+    "require_email_verification": false
+  },
+  "rbac": {
+    "roles": {
+      "admin": {
+        "permissions": [
+          "all"
+        ]
+      },
+      "operator": {
+        "permissions": [
+          "view_dashboard",
+          "view_logs",
+          "view_metrics",
+          "trigger_healing",
+          "acknowledge_alerts",
+          "export_data"
+        ]
+      },
+      "viewer": {
+        "permissions": [
+          "view_dashboard",
+          "view_logs",
+          "view_metrics"
+        ]
+      },
+      "lab_manager": {
+        "permissions": [
+          "view_dashboard",
+          "view_logs",
+          "view_metrics",
+          "manage_own_lab",
+          "trigger_healing"
+        ]
+      }
+    }
   },
   "notifications": {
     "email": {
@@ -62,14 +196,31 @@
       "username": "your-email@gmail.com",
       "password": "your-app-password",
       "from_email": "your-email@gmail.com",
-      "to_emails": ["alert@example.com"]
+      "to_emails": [
+        "alert@example.com"
+      ]
     },
-    "whatsapp": {
+    "slack": {
       "enabled": false,
-      "twilio_account_sid": "your-twilio-account-sid",
-      "twilio_auth_token": "your-twilio-auth-token",
-      "twilio_whatsapp_number": "+14155238886",
-      "to_numbers": ["+1234567890"]
+      "webhook_url": "https://hooks.slack.com/services/YOUR/WEBHOOK/URL"
     }
+  },
+  "languages": {
+    "default": "en",
+    "available": [
+      "en",
+      "es",
+      "fr",
+      "de",
+      "hi"
+    ]
+  },
+  "export": {
+    "formats": [
+      "csv",
+      "json",
+      "pdf"
+    ],
+    "max_export_records": 100000
   }
 }

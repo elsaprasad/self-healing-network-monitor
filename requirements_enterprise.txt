@@ -1,0 +1,70 @@
+# Core Web Framework
+flask==3.0.0
+werkzeug==3.0.1
+flask-socketio==5.3.5
+python-socketio==5.10.0
+
+# Network Monitoring
+ping3==4.0.4
+requests>=2.31.0
+dnspython>=2.4.2
+
+# SSH & Security
+paramiko==3.4.0
+cryptography>=41.0.0
+
+# Time-Series Database (OPTIONAL - uncomment if using InfluxDB)
+# influxdb-client>=1.38.0
+# Otherwise, SQLite is used (built into Python, no install needed!)
+
+# Data Processing
+pandas>=2.2.0
+numpy>=1.26.0
+
+# System Metrics
+psutil>=5.9.6
+
+# Date/Time Utilities
+python-dateutil>=2.8.2
+pytz>=2023.3
+
+# User Authentication & Sessions
+flask-login==0.6.3
+werkzeug>=3.0.1
+
+# Email Notifications (Optional)
+# Uncomment if using email alerts
+# email-validator>=2.1.0
+
+# Slack Notifications (Optional)
+# Uncomment if using Slack
+# slack-sdk>=3.23.0
+
+# Report Generation
+# Uncomment if generating PDF reports
+# reportlab>=4.0.7
+# matplotlib>=3.8.2
+
+# Development Tools (Optional)
+# pytest>=7.4.3
+# pytest-cov>=4.1.0
+# black>=23.12.0
+# flake8>=6.1.0
+
+# Production Server (Optional)
+# gunicorn>=21.2.0
+# eventlet>=0.33.3  # For WebSocket support
+
+# Notes:
+# 1. Install InfluxDB separately: 
+#    Docker: docker run -d -p 8086:8086 influxdb:1.8
+#    Or: apt-get install influxdb (Linux)
+#
+# 2. For Windows, you may need:
+#    pip install pywin32 (for Windows performance metrics)
+#
+# 3. Install all at once:
+#    pip install -r requirements_enterprise.txt
+#
+# 4. For development:
+#    pip install -r requirements_enterprise.txt pytest black flake8
